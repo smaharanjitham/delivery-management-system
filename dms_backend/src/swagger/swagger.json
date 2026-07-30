@@ -1,0 +1,559 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"SaveFcmTokenResponseDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SaveFcmTokenRequestDto": {
+				"properties": {
+					"user_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"fcm_token": {
+						"type": "string"
+					},
+					"device_name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"user_id",
+					"fcm_token"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DashboardSummaryDto": {
+				"properties": {
+					"pending": {
+						"type": "number",
+						"format": "double"
+					},
+					"delivered": {
+						"type": "number",
+						"format": "double"
+					},
+					"today": {
+						"type": "number",
+						"format": "double"
+					},
+					"cancelled": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"pending",
+					"delivered",
+					"today",
+					"cancelled"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RecentOrderDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"order_number": {
+						"type": "string"
+					},
+					"customer_name": {
+						"type": "string"
+					},
+					"delivery_address": {
+						"type": "string"
+					},
+					"delivery_latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"delivery_longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"status": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"order_number",
+					"customer_name",
+					"delivery_address",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DashboardResponseDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"summary": {
+						"$ref": "#/components/schemas/DashboardSummaryDto"
+					},
+					"recentOrders": {
+						"items": {
+							"$ref": "#/components/schemas/RecentOrderDto"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"summary",
+					"recentOrders"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterResponseDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterRequestDto": {
+				"properties": {
+					"full_name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"phone": {
+						"type": "string"
+					},
+					"role_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"full_name",
+					"email",
+					"password",
+					"role_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserSummaryDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"full_name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"phone": {
+						"type": "string"
+					},
+					"role_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"role_name": {
+						"type": "string"
+					},
+					"profile_image": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"full_name",
+					"email",
+					"role_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginResponseDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"accessToken": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserSummaryDto"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"accessToken",
+					"refreshToken",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginRequestDto": {
+				"description": "Payload sent by the client to log in.\r\nfcm_token / device_name are optional — pass them when the\r\nrequest comes from the mobile app so the device is registered\r\nfor push notifications right at login time.",
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"fcm_token": {
+						"type": "string"
+					},
+					"device_name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RefreshTokenResponseDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"accessToken": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"accessToken",
+					"refreshToken"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RefreshTokenRequestDto": {
+				"properties": {
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"refreshToken"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LogoutRequestDto": {
+				"properties": {
+					"refreshToken": {
+						"type": "string"
+					},
+					"fcm_token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"refreshToken"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"BearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "dms_backend",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/fcm-token/save": {
+			"post": {
+				"operationId": "SaveToken",
+				"responses": {
+					"200": {
+						"description": "Token saved",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SaveFcmTokenResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"description": "Saves or refreshes a device's FCM token. Called by the app both\r\nright after login and whenever Firebase rotates the token\r\n(NotificationService.instance.onTokenRefresh in the Flutter app).",
+				"tags": [
+					"FCM Token"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SaveFcmTokenRequestDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dashboard": {
+			"get": {
+				"operationId": "GetDashboard",
+				"responses": {
+					"200": {
+						"description": "Dashboard Loaded",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DashboardResponseDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized"
+					}
+				},
+				"description": "Dashboard Summary & Recent Orders",
+				"tags": [
+					"Dashboard"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/auth/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"201": {
+						"description": "User Registered",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RegisterResponseDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request"
+					}
+				},
+				"description": "Register User",
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterRequestDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Login successful",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginResponseDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Invalid credentials"
+					}
+				},
+				"description": "Login",
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequestDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/refresh-token": {
+			"post": {
+				"operationId": "RefreshToken",
+				"responses": {
+					"200": {
+						"description": "Token refreshed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RefreshTokenResponseDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Invalid refresh token"
+					}
+				},
+				"description": "Refresh Token",
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RefreshTokenRequestDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/logout": {
+			"post": {
+				"operationId": "Logout",
+				"responses": {
+					"200": {
+						"description": "Logout successful",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"success": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"message",
+										"success"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Logout",
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LogoutRequestDto"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

@@ -1,0 +1,1 @@
+//enums, magic strings, error messages

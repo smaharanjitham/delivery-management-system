@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81036348080",
+    "project_id": "deliverymanagement-ce52f",
+    "storage_bucket": "deliverymanagement-ce52f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81036348080:android:b251cc15356bffbf36c975",
+        "android_client_info": {
+          "package_name": "com.example.delivery_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACRmHZuWwoPgp0bHdKEwOUIUxokfYQHbY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
