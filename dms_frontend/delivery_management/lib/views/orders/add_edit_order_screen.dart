@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:delivery_management/core/theme/app_colors.dart';
+
 class AddEditOrderScreen extends StatefulWidget {
   final Map<String, dynamic>? order;
 
@@ -64,6 +66,16 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2035),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(
+              context,
+            ).colorScheme.copyWith(primary: AppColors.primary),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null) {
@@ -77,6 +89,16 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
     final picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(
+              context,
+            ).colorScheme.copyWith(primary: AppColors.primary),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null) {
@@ -93,14 +115,22 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
 
     if (deliveryDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please select delivery date")),
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.danger,
+          content: Text("Please select delivery date"),
+        ),
       );
       return;
     }
 
     if (deliveryTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please select delivery time")),
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.danger,
+          content: Text("Please select delivery time"),
+        ),
       );
       return;
     }
@@ -119,6 +149,8 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.success,
         content: Text(
           widget.order == null
               ? "Order Created Successfully"
@@ -133,8 +165,22 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
   InputDecoration inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      prefixIcon: Icon(icon),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      prefixIcon: Icon(icon, color: AppColors.primary),
+      filled: true,
+      fillColor: AppColors.inputFill,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.border),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.primary, width: 2),
+      ),
     );
   }
 
@@ -143,7 +189,21 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
     final isEdit = widget.order != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? "Edit Order" : "Add Order")),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: Text(
+          isEdit ? "Edit Order" : "Add Order",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -208,26 +268,57 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
 
               const SizedBox(height: 16),
 
-              ListTile(
-                leading: const Icon(Icons.calendar_today),
-                title: Text(
-                  deliveryDate == null
-                      ? "Select Delivery Date"
-                      : "${deliveryDate!.day}/${deliveryDate!.month}/${deliveryDate!.year}",
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.cardBackground,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                trailing: const Icon(Icons.edit),
-                onTap: pickDate,
-              ),
-
-              ListTile(
-                leading: const Icon(Icons.timer),
-                title: Text(
-                  deliveryTime == null
-                      ? "Select Delivery Time"
-                      : deliveryTime!.format(context),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(
+                        Icons.calendar_today,
+                        color: AppColors.primary,
+                      ),
+                      title: Text(
+                        deliveryDate == null
+                            ? "Select Delivery Date"
+                            : "${deliveryDate!.day}/${deliveryDate!.month}/${deliveryDate!.year}",
+                        style: const TextStyle(color: AppColors.textPrimary),
+                      ),
+                      trailing: const Icon(
+                        Icons.edit,
+                        color: AppColors.textSecondary,
+                      ),
+                      onTap: pickDate,
+                    ),
+                    const Divider(height: 1, color: AppColors.border),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.timer,
+                        color: AppColors.primary,
+                      ),
+                      title: Text(
+                        deliveryTime == null
+                            ? "Select Delivery Time"
+                            : deliveryTime!.format(context),
+                        style: const TextStyle(color: AppColors.textPrimary),
+                      ),
+                      trailing: const Icon(
+                        Icons.edit,
+                        color: AppColors.textSecondary,
+                      ),
+                      onTap: pickTime,
+                    ),
+                  ],
                 ),
-                trailing: const Icon(Icons.edit),
-                onTap: pickTime,
               ),
 
               const SizedBox(height: 16),
@@ -243,19 +334,43 @@ class _AddEditOrderScreenState extends State<AddEditOrderScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 55,
-                child: ElevatedButton.icon(
-                  onPressed: isLoading ? null : saveOrder,
-                  icon: isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.save),
-                  label: Text(isEdit ? "UPDATE ORDER" : "SAVE ORDER"),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: AppColors.buttonGradient,
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.35),
+                        blurRadius: 14,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: isLoading ? null : saveOrder,
+                    icon: isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.save),
+                    label: Text(
+                      isEdit ? "UPDATE ORDER" : "SAVE ORDER",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:delivery_management/core/theme/app_colors.dart';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -15,7 +17,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       "time": "2 min ago",
       "isRead": false,
       "icon": Icons.local_shipping,
-      "color": Colors.blue,
+      "color": AppColors.info,
     },
     {
       "title": "Delivery Completed",
@@ -23,7 +25,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       "time": "10 min ago",
       "isRead": true,
       "icon": Icons.check_circle,
-      "color": Colors.green,
+      "color": AppColors.success,
     },
     {
       "title": "Delivery Delayed",
@@ -31,7 +33,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       "time": "25 min ago",
       "isRead": false,
       "icon": Icons.warning,
-      "color": Colors.orange,
+      "color": AppColors.warning,
     },
     {
       "title": "Order Cancelled",
@@ -39,7 +41,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       "time": "1 hour ago",
       "isRead": true,
       "icon": Icons.cancel,
-      "color": Colors.red,
+      "color": AppColors.danger,
     },
   ];
 
@@ -65,14 +67,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("Notifications"),
+        title: const Text(
+          "Notifications",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         centerTitle: true,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
+        ),
         actions: [
           IconButton(
             tooltip: "Mark all as read",
             onPressed: markAllAsRead,
-            icon: const Icon(Icons.done_all),
+            icon: const Icon(Icons.done_all, color: Colors.white),
           ),
         ],
       ),
@@ -81,16 +92,25 @@ class _NotificationScreenState extends State<NotificationScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.notifications_off, size: 80, color: Colors.grey),
+                  Icon(
+                    Icons.notifications_off,
+                    size: 80,
+                    color: AppColors.textSecondary,
+                  ),
                   SizedBox(height: 15),
                   Text(
                     "No Notifications",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ],
               ),
             )
           : RefreshIndicator(
+              color: AppColors.primary,
               onRefresh: refreshNotifications,
               child: ListView.builder(
                 padding: const EdgeInsets.all(12),
@@ -104,16 +124,33 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     background: Container(
                       alignment: Alignment.centerRight,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      color: Colors.red,
+                      decoration: BoxDecoration(
+                        color: AppColors.danger,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     onDismissed: (_) {
                       deleteNotification(index);
                     },
-                    child: Card(
-                      elevation: 2,
+                    child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBackground,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
                       child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         leading: CircleAvatar(
                           backgroundColor: notification["color"].withOpacity(
                             .15,
@@ -126,6 +163,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         title: Text(
                           notification["title"],
                           style: TextStyle(
+                            color: AppColors.textPrimary,
                             fontWeight: notification["isRead"]
                                 ? FontWeight.normal
                                 : FontWeight.bold,
@@ -135,12 +173,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 4),
-                            Text(notification["message"]),
+                            Text(
+                              notification["message"],
+                              style: const TextStyle(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
                             const SizedBox(height: 6),
                             Text(
                               notification["time"],
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: AppColors.textSecondary,
                                 fontSize: 12,
                               ),
                             ),
@@ -152,7 +195,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 width: 10,
                                 height: 10,
                                 decoration: const BoxDecoration(
-                                  color: Colors.blue,
+                                  color: AppColors.primary,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -162,7 +205,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           });
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(notification["title"])),
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              content: Text(notification["title"]),
+                            ),
                           );
                         },
                       ),

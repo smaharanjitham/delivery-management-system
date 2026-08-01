@@ -1,6 +1,8 @@
 import 'package:delivery_management/views/orders/add_edit_order_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'package:delivery_management/core/theme/app_colors.dart';
+
 class OrderDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> order;
 
@@ -37,16 +39,57 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     super.dispose();
   }
 
+  Widget sectionCard({required Widget child}) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Padding(padding: const EdgeInsets.all(16), child: child),
+    );
+  }
+
+  Widget sectionTitle(String title) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: AppColors.textPrimary,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final order = widget.order;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("Order Details"),
+        title: const Text(
+          "Order Details",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: const Icon(Icons.edit, color: Colors.white),
             onPressed: () async {
               final updatedOrder = await Navigator.push(
                 context,
@@ -70,228 +113,231 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           children: [
             Hero(
               tag: order["id"],
-              child: Card(
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.blue.shade100,
-                        child: const Icon(
-                          Icons.local_shipping,
-                          size: 35,
-                          color: Colors.blue,
-                        ),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: AppColors.primaryGradient,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.3),
+                      blurRadius: 18,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    const CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.local_shipping,
+                        size: 35,
+                        color: AppColors.primary,
                       ),
+                    ),
 
-                      const SizedBox(height: 15),
+                    const SizedBox(height: 15),
 
-                      Text(
-                        order["customer"],
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Text(
+                      order["customer"],
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
+                    ),
 
-                      const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                      Text(
-                        order["id"],
-                        style: TextStyle(color: Colors.grey.shade700),
-                      ),
-                    ],
+                    Text(
+                      order["id"],
+                      style: TextStyle(color: Colors.white.withOpacity(0.85)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            sectionCard(
+              child: Column(
+                children: [
+                  buildRow(
+                    Icons.location_on,
+                    "Delivery Address",
+                    order["address"],
                   ),
-                ),
+
+                  const Divider(color: AppColors.border),
+
+                  buildRow(Icons.phone, "Phone", "9876543210"),
+
+                  const Divider(color: AppColors.border),
+
+                  buildRow(Icons.person, "Receiver", order["customer"]),
+                ],
               ),
             ),
 
-            const SizedBox(height: 20),
+            sectionCard(
+              child: Column(
+                children: [
+                  sectionTitle("Delivery Status"),
 
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    buildRow(
-                      Icons.location_on,
-                      "Delivery Address",
-                      order["address"],
-                    ),
+                  const SizedBox(height: 15),
 
-                    const Divider(),
-
-                    buildRow(Icons.phone, "Phone", "9876543210"),
-
-                    const Divider(),
-
-                    buildRow(Icons.person, "Receiver", order["customer"]),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Delivery Status",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    DropdownButtonFormField<String>(
-                      value: selectedStatus,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: statusList
-                          .map(
-                            (status) => DropdownMenuItem(
-                              value: status,
-                              child: Text(status),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedStatus = value!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Delivery Remarks",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    TextField(
-                      controller: remarksController,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                        hintText: "Enter delivery remarks...",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Delivery Proof",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    Container(
-                      height: 180,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
+                  DropdownButtonFormField<String>(
+                    value: selectedStatus,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.inputFill,
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.image, size: 60, color: Colors.grey),
-                          SizedBox(height: 10),
-                          Text("No Image Selected"),
-                        ],
+                        borderSide: BorderSide.none,
                       ),
                     ),
+                    items: statusList
+                        .map(
+                          (status) => DropdownMenuItem(
+                            value: status,
+                            child: Text(status),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedStatus = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
 
-                    const SizedBox(height: 15),
+            sectionCard(
+              child: Column(
+                children: [
+                  sectionTitle("Delivery Remarks"),
 
-                    Row(
+                  const SizedBox(height: 15),
+
+                  TextField(
+                    controller: remarksController,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      hintText: "Enter delivery remarks...",
+                      filled: true,
+                      fillColor: AppColors.inputFill,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            sectionCard(
+              child: Column(
+                children: [
+                  sectionTitle("Delivery Proof"),
+
+                  const SizedBox(height: 15),
+
+                  Container(
+                    height: 180,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.inputFill,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.camera),
-                            label: const Text("Camera"),
-                          ),
+                        Icon(
+                          Icons.image,
+                          size: 60,
+                          color: AppColors.textSecondary,
                         ),
-
-                        const SizedBox(width: 10),
-
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.photo),
-                            label: const Text("Gallery"),
-                          ),
+                        SizedBox(height: 10),
+                        Text(
+                          "No Image Selected",
+                          style: TextStyle(color: AppColors.textSecondary),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            side: const BorderSide(color: AppColors.primary),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () {},
+                          icon: const Icon(Icons.camera),
+                          label: const Text("Camera"),
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            side: const BorderSide(color: AppColors.primary),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () {},
+                          icon: const Icon(Icons.photo),
+                          label: const Text("Gallery"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-
-            const SizedBox(height: 20),
 
             SizedBox(
               width: double.infinity,
               height: 55,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.success,
                   foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                 ),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Order Updated Successfully")),
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text("Order Updated Successfully"),
+                    ),
                   );
                 },
                 icon: const Icon(Icons.save),
-                label: const Text("UPDATE ORDER"),
+                label: const Text(
+                  "UPDATE ORDER",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
 
@@ -301,11 +347,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               width: double.infinity,
               height: 55,
               child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.primary),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
                 onPressed: () {
                   // Navigate to Google Maps screen
                 },
                 icon: const Icon(Icons.map),
-                label: const Text("OPEN MAP"),
+                label: const Text(
+                  "OPEN MAP",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],
@@ -317,7 +373,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget buildRow(IconData icon, String title, String value) {
     return Row(
       children: [
-        Icon(icon, color: Colors.blue),
+        Icon(icon, color: AppColors.primary),
 
         const SizedBox(width: 15),
 
@@ -325,7 +381,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(color: Colors.grey)),
+              Text(
+                title,
+                style: const TextStyle(color: AppColors.textSecondary),
+              ),
 
               const SizedBox(height: 5),
 
@@ -334,6 +393,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],

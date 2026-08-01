@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:delivery_management/core/theme/app_colors.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../login/login_screen.dart';
 
@@ -47,13 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF1565C0), Color(0xFF42A5F5)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   child: const Icon(
                     Icons.local_shipping,
-                    color: Colors.blue,
+                    color: AppColors.primary,
                     size: 70,
                   ),
                 ),
